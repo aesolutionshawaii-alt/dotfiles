@@ -8,3 +8,7 @@
 
 # Local overrides (create these for machine-specific config)
 local.zsh
+
+# Dependencies (reinstall with: cd ~/.dotfiles && npm install)
+node_modules/
+package-lock.json

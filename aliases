@@ -48,3 +48,7 @@ alias news="scrape-news"
 alias post="post-metricool"
 alias visual="generate-visual"
 alias demo="run-demo"
+
+# Image processing
+alias img="webimg"
+alias imgdir="webimg . --preset=standard"

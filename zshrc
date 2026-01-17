@@ -90,6 +90,7 @@ mkcd() {
 # Show my custom tools
 tools() {
   echo "Available tools in ~/bin:"
+  echo "  webimg           - Optimize images for web (sharp-based)"
   echo "  warm-cloudinary  - Pre-warm Cloudinary CDN cache"
   echo "  scrape-news      - Scrape news for content ideas"
   echo "  post-metricool   - Schedule posts to Metricool"
@@ -97,7 +98,7 @@ tools() {
   echo "  run-demo         - Run terminal demos"
   echo "  generate-icons   - Generate PWA icons"
   echo ""
-  echo "Aliases: warm, news, post, visual, demo"
+  echo "Aliases: img, warm, news, post, visual, demo"
 }
 
 # Dotfiles sync helper

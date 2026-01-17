@@ -1,0 +1,171 @@
+#!/usr/bin/env node
+// Web Image Optimizer - Sharp-based image processing for web
+// Usage: webimg <input> [output] [--preset=standard|hero|thumb]
+
+// Load sharp from dotfiles node_modules
+const sharp = require(require('path').join(process.env.HOME, '.dotfiles', 'node_modules', 'sharp'));
+const fs = require('fs');
+const path = require('path');
+
+// Presets based on documented settings
+const PRESETS = {
+  standard: { size: 1400, quality: 82 },  // Default - retina ready
+  hero: { size: 1920, quality: 82 },      // Large hero images
+  thumb: { size: 800, quality: 78 }       // Thumbnails/cards
+};
+
+async function processImage(inputPath, outputPath, preset = 'standard') {
+  const { size, quality } = PRESETS[preset];
+
+  const inputBuffer = fs.readFileSync(inputPath);
+  const inputStats = fs.statSync(inputPath);
+  const inputSize = (inputStats.size / 1024 / 1024).toFixed(2);
+
+  await sharp(inputBuffer)
+    .resize(size, size, {
+      fit: 'inside',
+      withoutEnlargement: true
+    })
+    .sharpen({
+      sigma: 0.8,
+      m1: 0.5,
+      m2: 0.5
+    })
+    .jpeg({
+      quality: quality,
+      mozjpeg: true,
+      chromaSubsampling: '4:4:4'
+    })
+    .toFile(outputPath);
+
+  const outputStats = fs.statSync(outputPath);
+  const outputSize = (outputStats.size / 1024).toFixed(0);
+  const reduction = ((1 - outputStats.size / inputStats.size) * 100).toFixed(0);
+
+  return { inputSize, outputSize, reduction };
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+
+  if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
+    console.log(`
+Web Image Optimizer
+  Resize, sharpen, and compress images for web delivery.
+  Uses Sharp with optimized settings (mozjpeg, 4:4:4 chroma).
+
+Usage:
+  webimg <input>              Process single image
+  webimg <input> <output>     Process to specific output path
+  webimg <directory>          Process all images in directory
+  webimg <input> --preset=X   Use preset (standard, hero, thumb)
+
+Presets:
+  standard  1400px, q82  (default - retina ready)
+  hero      1920px, q82  (large hero images)
+  thumb     800px, q78   (thumbnails/cards)
+
+Examples:
+  webimg photo.jpg
+  webimg photo.jpg optimized.jpg
+  webimg ./photos --preset=hero
+  webimg IMG_*.jpg
+`);
+    process.exit(0);
+  }
+
+  // Parse preset flag
+  let preset = 'standard';
+  const presetArg = args.find(a => a.startsWith('--preset='));
+  if (presetArg) {
+    preset = presetArg.split('=')[1];
+    if (!PRESETS[preset]) {
+      console.error(`Unknown preset: ${preset}. Use: standard, hero, thumb`);
+      process.exit(1);
+    }
+    args.splice(args.indexOf(presetArg), 1);
+  }
+
+  const input = args[0];
+  const output = args[1];
+
+  // Check if input is a directory
+  if (fs.existsSync(input) && fs.statSync(input).isDirectory()) {
+    const files = fs.readdirSync(input).filter(f =>
+      /\.(jpg|jpeg|png|webp)$/i.test(f)
+    );
+
+    if (files.length === 0) {
+      console.log('No images found in directory');
+      process.exit(0);
+    }
+
+    const outDir = path.join(input, 'optimized');
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
+
+    console.log(`Processing ${files.length} images (${preset} preset)...\n`);
+
+    let totalSaved = 0;
+    for (const file of files) {
+      const inputPath = path.join(input, file);
+      const outputPath = path.join(outDir, file.replace(/\.(png|webp)$/i, '.jpg'));
+
+      try {
+        const result = await processImage(inputPath, outputPath, preset);
+        console.log(`✓ ${file}: ${result.inputSize}MB → ${result.outputSize}KB (-${result.reduction}%)`);
+        totalSaved += parseFloat(result.inputSize) - parseFloat(result.outputSize) / 1024;
+      } catch (err) {
+        console.log(`✗ ${file}: ${err.message}`);
+      }
+    }
+
+    console.log(`\nDone! Output: ${outDir}`);
+    console.log(`Total saved: ~${totalSaved.toFixed(1)}MB`);
+
+  } else if (fs.existsSync(input)) {
+    // Single file
+    const outputPath = output || input.replace(/(\.[^.]+)$/, '-web.jpg');
+
+    console.log(`Processing (${preset} preset)...`);
+    const result = await processImage(input, outputPath, preset);
+    console.log(`✓ ${result.inputSize}MB → ${result.outputSize}KB (-${result.reduction}%)`);
+    console.log(`Output: ${outputPath}`);
+
+  } else {
+    // Try glob pattern
+    const glob = require('path').basename(input);
+    const dir = require('path').dirname(input) || '.';
+    const pattern = new RegExp('^' + glob.replace(/\*/g, '.*') + '$', 'i');
+
+    const files = fs.readdirSync(dir).filter(f => pattern.test(f));
+
+    if (files.length === 0) {
+      console.error(`No files found: ${input}`);
+      process.exit(1);
+    }
+
+    const outDir = path.join(dir, 'optimized');
+    if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
+
+    console.log(`Processing ${files.length} images (${preset} preset)...\n`);
+
+    for (const file of files) {
+      const inputPath = path.join(dir, file);
+      const outputPath = path.join(outDir, file.replace(/\.(png|webp)$/i, '.jpg'));
+
+      try {
+        const result = await processImage(inputPath, outputPath, preset);
+        console.log(`✓ ${file}: ${result.inputSize}MB → ${result.outputSize}KB (-${result.reduction}%)`);
+      } catch (err) {
+        console.log(`✗ ${file}: ${err.message}`);
+      }
+    }
+
+    console.log(`\nDone! Output: ${outDir}`);
+  }
+}
+
+main().catch(err => {
+  console.error('Error:', err.message);
+  process.exit(1);
+});

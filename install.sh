@@ -34,6 +34,13 @@ fi
 ln -sf "$DOTFILES/aliases" "$HOME/.aliases"
 echo "  ✓ ~/.aliases -> $DOTFILES/aliases"
 
+# Install Node dependencies (for webimg)
+if [ -f "$DOTFILES/package.json" ]; then
+  echo "  Installing Node dependencies..."
+  cd "$DOTFILES" && npm install --silent
+  echo "  ✓ Node dependencies installed"
+fi
+
 echo ""
 echo "Installation complete!"
 echo ""
