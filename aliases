@@ -1,0 +1,50 @@
+# Josh's Aliases
+# Sourced by .zshrc
+
+# Navigation shortcuts
+alias ..="cd .."
+alias ...="cd ../.."
+alias desk="cd ~/Desktop"
+alias dev="cd ~/Desktop"
+
+# Git shortcuts
+alias gs="git status"
+alias gd="git diff"
+alias ga="git add"
+alias gc="git commit"
+alias gp="git push"
+alias gl="git log --oneline -20"
+alias gco="git checkout"
+alias gb="git branch"
+
+# npm/node shortcuts
+alias ni="npm install"
+alias nr="npm run"
+alias nd="npm run dev"
+alias nb="npm run build"
+
+# Project shortcuts
+alias reel="cd ~/Desktop/reel-addiction-iii && npm run dev"
+alias mango="cd ~/Desktop/mango && npm run dev"
+alias jnchev="cd ~/Desktop/jn-chevrolet-content"
+
+# Quick edits
+alias zshconfig="code ~/.zshrc"
+alias aliases="code ~/.aliases"
+
+# Utilities
+alias ll="ls -la"
+alias la="ls -A"
+alias l="ls -CF"
+alias cls="clear"
+alias ports="lsof -i -P -n | grep LISTEN"
+alias myip="curl -s ifconfig.me"
+
+# Cloudinary warming (Reel Addiction III)
+alias warm="warm-cloudinary"
+
+# Content tools (JN Chevrolet)
+alias news="scrape-news"
+alias post="post-metricool"
+alias visual="generate-visual"
+alias demo="run-demo"

@@ -1,0 +1,10 @@
+# OS files
+.DS_Store
+*.swp
+*.swo
+
+# Backups
+*.backup
+
+# Local overrides (create these for machine-specific config)
+local.zsh
