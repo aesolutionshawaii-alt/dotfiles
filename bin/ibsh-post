@@ -1,0 +1,12 @@
+#!/bin/bash
+# Schedule posts to Metricool for IBSH
+# Usage: ibsh-post [--dry-run] [--post-id=001]
+
+PROJECT_DIR="$HOME/Desktop/ibsh-content-system"
+
+if [ ! -d "$PROJECT_DIR" ]; then
+  echo "Error: Project not found at $PROJECT_DIR"
+  exit 1
+fi
+
+cd "$PROJECT_DIR" && node src/post-metricool.js "$@"

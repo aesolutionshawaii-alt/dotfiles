@@ -1,0 +1,12 @@
+#!/bin/bash
+# Run terminal demos and capture output for IBSH visuals
+# Usage: ibsh-demo --list | ibsh-demo --command="your command"
+
+PROJECT_DIR="$HOME/Desktop/ibsh-content-system"
+
+if [ ! -d "$PROJECT_DIR" ]; then
+  echo "Error: Project not found at $PROJECT_DIR"
+  exit 1
+fi
+
+cd "$PROJECT_DIR" && node src/run-demo.js "$@"

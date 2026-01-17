@@ -1,0 +1,12 @@
+#!/bin/bash
+# Scrape news sources for IBSH content ideas
+# Usage: ibsh-news [--source=ai|hawaii|reddit]
+
+PROJECT_DIR="$HOME/Desktop/ibsh-content-system"
+
+if [ ! -d "$PROJECT_DIR" ]; then
+  echo "Error: Project not found at $PROJECT_DIR"
+  exit 1
+fi
+
+cd "$PROJECT_DIR" && node src/scrape-news.js "$@"

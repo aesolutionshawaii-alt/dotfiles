@@ -90,15 +90,25 @@ mkcd() {
 # Show my custom tools
 tools() {
   echo "Available tools in ~/bin:"
-  echo "  webimg           - Optimize images for web (sharp-based)"
-  echo "  warm-cloudinary  - Pre-warm Cloudinary CDN cache"
-  echo "  scrape-news      - Scrape news for content ideas"
-  echo "  post-metricool   - Schedule posts to Metricool"
-  echo "  generate-visual  - Create styled social visuals"
-  echo "  run-demo         - Run terminal demos"
-  echo "  generate-icons   - Generate PWA icons"
   echo ""
-  echo "Aliases: img, warm, news, post, visual, demo"
+  echo "  General:"
+  echo "    webimg           - Optimize images for web (sharp-based)"
+  echo "    generate-icons   - Generate PWA icons"
+  echo ""
+  echo "  JN Chevrolet:"
+  echo "    scrape-news      - Scrape news (18 sources)"
+  echo "    post-metricool   - Schedule posts to Metricool"
+  echo "    generate-visual  - Create styled social visuals"
+  echo "    run-demo         - Run terminal demos"
+  echo ""
+  echo "  IBSH:"
+  echo "    ibsh-news        - Scrape news (23 sources)"
+  echo "    ibsh-post        - Schedule posts to Metricool"
+  echo "    ibsh-visual      - Create styled social visuals"
+  echo "    ibsh-demo        - Run terminal demos"
+  echo ""
+  echo "  Reel Addiction III:"
+  echo "    warm-cloudinary  - Pre-warm Cloudinary CDN cache"
 }
 
 # Dotfiles sync helper
