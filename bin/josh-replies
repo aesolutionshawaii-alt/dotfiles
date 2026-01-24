@@ -1,0 +1,12 @@
+#!/bin/bash
+# Find reply opportunities for Josh X
+# Usage: josh-replies [--url="tweet_url"]
+
+PROJECT_DIR="$HOME/Desktop/josh-x"
+
+if [ ! -d "$PROJECT_DIR" ]; then
+  echo "Error: Project not found at $PROJECT_DIR"
+  exit 1
+fi
+
+cd "$PROJECT_DIR" && node src/find-replies.js "$@"

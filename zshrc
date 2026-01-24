@@ -69,7 +69,7 @@ export NVM_DIR="$HOME/.nvm"
 proj() {
   if [ -z "$1" ]; then
     echo "Usage: proj <project-name>"
-    echo "Available: reel, mango, jnchev, ibsh"
+    echo "Available: reel, mango, jnchev, ibsh, josh"
     return 1
   fi
 
@@ -78,6 +78,7 @@ proj() {
     mango)  cd ~/Desktop/mango ;;
     jnchev) cd ~/Desktop/jn-chevrolet-content ;;
     ibsh)   cd ~/Desktop/ibsh-content-system ;;
+    josh)   cd ~/Desktop/josh-x ;;
     *)      echo "Unknown project: $1" ;;
   esac
 }
@@ -97,15 +98,23 @@ tools() {
   echo ""
   echo "  JN Chevrolet:"
   echo "    scrape-news      - Scrape news (18 sources)"
+  echo "    jnchev-replies   - Find reply opportunities"
   echo "    post-metricool   - Schedule posts to Metricool"
   echo "    generate-visual  - Create styled social visuals"
   echo "    run-demo         - Run terminal demos"
   echo ""
   echo "  IBSH:"
   echo "    ibsh-news        - Scrape news (23 sources)"
+  echo "    ibsh-replies     - Find reply opportunities"
   echo "    ibsh-post        - Schedule posts to Metricool"
   echo "    ibsh-visual      - Create styled social visuals"
   echo "    ibsh-demo        - Run terminal demos"
+  echo ""
+  echo "  Josh X (Personal):"
+  echo "    josh-news        - Scrape Bitcoin/AI news"
+  echo "    josh-history     - Scrape Claude chats for content"
+  echo "    josh-replies     - Find reply opportunities"
+  echo "    josh-post        - Schedule posts to Metricool"
   echo ""
   echo "  Reel Addiction III:"
   echo "    warm-cloudinary  - Pre-warm Cloudinary CDN cache"
@@ -127,3 +136,4 @@ dotfiles-pull() {
   cd -
   source ~/.zshrc
 }
+export PATH="$HOME/.local/bin:$PATH"
